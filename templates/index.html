@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Student Performance Indicator – Overview</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: radial-gradient(circle at top left, #fdf4ff 0, #eff6ff 40%, #e0f2fe 80%);
+            color: #0f172a;
+            display: flex;
+            align-items: stretch;
+            justify-content: center;
+            padding: 24px;
+        }
+
+        .page {
+            max-width: 1120px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(16px);
+            border-radius: 24px;
+            padding: 32px 32px 28px;
+            box-shadow:
+                0 22px 45px rgba(15, 23, 42, 0.15),
+                0 0 0 1px rgba(148, 163, 184, 0.25);
+            display: grid;
+            grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+            gap: 32px;
+        }
+
+        @media (max-width: 900px) {
+            body {
+                padding: 16px;
+            }
+
+            .page {
+                grid-template-columns: minmax(0, 1fr);
+                padding: 24px 20px 20px;
+            }
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 10px 4px 4px;
+            border-radius: 999px;
+            background: rgba(59, 130, 246, 0.09);
+            border: 1px solid rgba(59, 130, 246, 0.35);
+            color: #1d4ed8;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .badge-dot {
+            width: 18px;
+            height: 18px;
+            border-radius: 999px;
+            background: radial-gradient(circle at 30% 20%, #bfdbfe, #1d4ed8);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            box-shadow: 0 0 0 4px rgba(191, 219, 254, 0.7);
+        }
+
+        .title {
+            font-size: clamp(28px, 3vw + 8px, 40px);
+            line-height: 1.1;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            color: #0f172a;
+            margin-bottom: 12px;
+        }
+
+        .title span.highlight {
+            background: linear-gradient(120deg, #2563eb, #6366f1, #f97316);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #475569;
+            max-width: 40rem;
+            margin-bottom: 20px;
+        }
+
+        .pill-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 22px;
+        }
+
+        .pill {
+            font-size: 11px;
+            padding: 6px 12px;
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.6);
+            color: #334155;
+            background: rgba(248, 250, 252, 0.9);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .pill-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: #22c55e;
+        }
+
+        .pill-dot.orange {
+            background: #fb923c;
+        }
+
+        .pill-dot.purple {
+            background: #a855f7;
+        }
+
+        .section-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.18em;
+            color: #64748b;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+
+        .stat-card {
+            border-radius: 14px;
+            border: 1px solid rgba(226, 232, 240, 0.9);
+            background: linear-gradient(135deg, #f9fafb, #eff6ff);
+            padding: 10px 12px;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: #64748b;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            font-weight: 600;
+        }
+
+        .stat-value {
+            font-size: 22px;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .stat-caption {
+            font-size: 11px;
+            color: #6b7280;
+            margin-top: 2px;
+        }
+
+        .bullets {
+            margin-top: 6px;
+            padding-left: 16px;
+        }
+
+        .bullets li {
+            font-size: 12px;
+            color: #4b5563;
+            margin-bottom: 4px;
+        }
+
+        .cta-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 16px;
+            align-items: center;
+        }
+
+        .primary-btn {
+            border: none;
+            cursor: pointer;
+            padding: 10px 18px;
+            border-radius: 999px;
+            background: linear-gradient(120deg, #2563eb, #6366f1);
+            color: white;
+            font-size: 13px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow:
+                0 14px 30px rgba(37, 99, 235, 0.35),
+                0 0 0 1px rgba(191, 219, 254, 0.9);
+            transition: transform 120ms ease, box-shadow 120ms ease, filter 120ms ease;
+        }
+
+        .primary-btn:hover {
+            transform: translateY(-1px);
+            filter: brightness(1.02);
+            box-shadow:
+                0 18px 40px rgba(37, 99, 235, 0.4),
+                0 0 0 1px rgba(191, 219, 254, 1);
+        }
+
+        .primary-btn span.icon {
+            width: 18px;
+            height: 18px;
+            border-radius: 999px;
+            background: rgba(15, 23, 42, 0.9);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+        }
+
+        .hint {
+            font-size: 11px;
+            color: #6b7280;
+        }
+
+        /* Right: visualization column with three cards */
+        .viz-column {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .viz-card {
+            border-radius: 18px;
+            border: 1px solid rgba(148, 163, 184, 0.5);
+            background: radial-gradient(circle at 10% 0, #eff6ff, #fefce8 40%, #ffffff 90%);
+            padding: 16px 16px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .viz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .viz-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        .viz-badges {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .viz-mini-pill {
+            padding: 4px 8px;
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.7);
+            font-size: 10px;
+            color: #475569;
+            background: rgba(255, 255, 255, 0.85);
+        }
+
+        .viz-body {
+            border-radius: 12px;
+            background: rgba(15, 23, 42, 0.97);
+            padding: 14px 12px 12px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.9);
+        }
+
+        .viz-body.image-body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .viz-image {
+            max-width: 100%;
+            max-height: 180px;
+            border-radius: 10px;
+            object-fit: contain;
+        }
+
+        .axis-label-x,
+        .axis-label-y {
+            position: absolute;
+            font-size: 10px;
+            color: #9ca3af;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .axis-label-x {
+            bottom: 4px;
+            right: 12px;
+        }
+
+        .axis-label-y {
+            top: 10px;
+            left: 8px;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+        }
+
+        .plot {
+            display: grid;
+            grid-template-rows: repeat(4, 1fr);
+            grid-template-columns: repeat(4, 1fr);
+            gap: 4px;
+            padding: 6px 6px 18px 18px;
+        }
+
+        .dot-group {
+            width: 100%;
+            height: 100%;
+            border-radius: 10px;
+            background: radial-gradient(circle at 0 0, rgba(59, 130, 246, 0.1), transparent 55%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dot {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            border-radius: 999px;
+        }
+
+        .dot.male {
+            background: #3b82f6;
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.8);
+        }
+
+        .dot.female {
+            background: #ec4899;
+            box-shadow: 0 0 10px rgba(236, 72, 153, 0.8);
+        }
+
+        .dot.other {
+            background: #22c55e;
+            box-shadow: 0 0 10px rgba(34, 197, 94, 0.7);
+        }
+
+        .legend {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 8px;
+            gap: 8px;
+        }
+
+        .legend-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 10px;
+            color: #e5e7eb;
+            padding: 3px 7px;
+            border-radius: 999px;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(55, 65, 81, 0.9);
+        }
+
+        .legend-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+        }
+
+        .legend-dot.male {
+            background: #3b82f6;
+        }
+
+        .legend-dot.female {
+            background: #ec4899;
+        }
+
+        .legend-dot.other {
+            background: #22c55e;
+        }
+
+        .viz-note {
+            font-size: 10px;
+            color: #6b7280;
+            margin-top: 4px;
+        }
+
+        .corner-pill {
+            position: absolute;
+            top: -30px;
+            right: -30px;
+            width: 120px;
+            height: 120px;
+            border-radius: 999px;
+            background: conic-gradient(from 220deg, rgba(56, 189, 248, 0.9), rgba(129, 140, 248, 0.9), rgba(244, 114, 182, 0.9), rgba(56, 189, 248, 0.9));
+            opacity: 0.14;
+            filter: blur(1px);
+        }
+
+        .viz-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            color: #4b5563;
+            margin-top: 4px;
+        }
+
+        .tagline {
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .chip-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 4px;
+            justify-content: flex-end;
+        }
+
+        .chip {
+            font-size: 10px;
+            padding: 3px 8px;
+            border-radius: 999px;
+            background: rgba(219, 234, 254, 0.9);
+            color: #1e40af;
+            border: 1px solid rgba(129, 140, 248, 0.7);
+        }
+    </style>
+</head>
+
+<body>
+    <main class="page">
+        <!-- Left: project introduction -->
+        <section>
+            <div class="badge">
+                <span class="badge-dot">A+</span>
+                Student Performance Indicator
+            </div>
+
+            <h1 class="title">
+                Discover what drives
+                <span class="highlight">exam success</span>
+                in the classroom.
+            </h1>
+
+            <p class="subtitle">
+                This project explores how
+                gender, ethnicity, parental education, lunch type, and test preparation
+                together shape students' exam performance. By uncovering these
+                patterns, we move from raw scores to actionable insight for educators
+                and learners.
+            </p>
+
+            <div class="pill-row">
+                <div class="pill">
+                    <span class="pill-dot"></span>
+                    Gender & Ethnicity
+                </div>
+                <div class="pill">
+                    <span class="pill-dot orange"></span>
+                    Parental Education
+                </div>
+                <div class="pill">
+                    <span class="pill-dot purple"></span>
+                    Lunch & Test Prep
+                </div>
+                <div class="pill">
+                    🎯 Outcome:
+                    <strong>Academic Achievement</strong>
+                </div>
+            </div>
+
+            <p class="section-label">What you are about to see</p>
+            <div class="grid">
+                <div class="stat-card">
+                    <div class="stat-label">Students analyzed</div>
+                    <div class="stat-value">1 dataset</div>
+                    <div class="stat-caption">Integrated exam performance records</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Key dimensions</div>
+                    <div class="stat-value">5 factors</div>
+                    <div class="stat-caption">Social & academic context combined</div>
+                </div>
+            </div>
+
+            <ul class="bullets">
+                <li>Reveal how background and preparation influence exam outcomes.</li>
+                <li>Spot performance gaps and opportunities for targeted support.</li>
+                <li>Build a data-driven story of student achievement.</li>
+            </ul>
+
+            <div class="cta-row">
+                <button class="primary-btn" type="button">
+                    <span class="icon">🚀</span>
+                    Start Analysis
+                </button>
+                <span class="hint">Scroll or continue in the notebook to see the full analysis.</span>
+            </div>
+            <article class="viz-card">
+                <div class="corner-pill" aria-hidden="true"></div>
+                <header class="viz-header">
+                    <div>
+                        <p class="section-label" style="margin-bottom: 2px;"> </p>
+                        <div class="viz-title">Multivariate Analysis by Gender</div>
+                    </div>
+                </header>
+                <div class="viz-body image-body">
+                    <img src="/templates/viz4.png" alt="First performance visualization" class="viz-image" />
+                </div>
+                <p class="viz-note">
+                    The pairwise comparison plot demonstrates strong positive correlations between math, reading, and
+                    writing scores.
+                    Gender-based color separation shows slight performance variation patterns, indicating that subject
+                    scores are interrelated across student groups.</p>
+            </article>
+        </section>
+
+        <!-- Right: three visualization placeholders -->
+        <section class="viz-column" aria-label="Preview of student performance visualizations">
+            <!-- Visualization 1 -->
+            <article class="viz-card">
+                <div class="corner-pill" aria-hidden="true"></div>
+                <header class="viz-header">
+                    <div>
+                        <p class="section-label" style="margin-bottom: 2px;">Visualization 1</p>
+                        <div class="viz-title">Overall Performance</div>
+                    </div>
+                </header>
+                <div class="viz-body image-body">
+                    <img src="/templates/viz1.png" alt="First performance visualization" class="viz-image" />
+                </div>
+                <p class="viz-note">The overall performance chart shows the average scores across all subjects,
+                    highlighting the general academic achievement of students.</p>
+            </article>
+
+            <!-- Visualization 2 -->
+            <article class="viz-card">
+                <div class="corner-pill" aria-hidden="true"></div>
+                <header class="viz-header">
+                    <div>
+                        <p class="section-label" style="margin-bottom: 2px;">Visualization 2</p>
+                        <div class="viz-title">Scores by Demographics</div>
+                    </div>
+                </header>
+                <div class="viz-body image-body">
+                    <img src="/templates/viz2.png" alt="Second performance visualization" class="viz-image" />
+                </div>
+                <p class="viz-note">Average scores vary across different ethnic groups, indicating demographic
+                    differences in student academic performance.</p>
+            </article>
+
+            <!-- Visualization 3 -->
+            <article class="viz-card">
+                <div class="corner-pill" aria-hidden="true"></div>
+                <header class="viz-header">
+                    <div>
+                        <p class="section-label" style="margin-bottom: 2px;">Visualization 3</p>
+                        <div class="viz-title">Impact of Preparation</div>
+                    </div>
+                </header>
+                <div class="viz-body image-body">
+                    <img src="/templates/viz3.png" alt="Third performance visualization" class="viz-image" />
+                </div>
+                <p class="viz-note">Students who get Standard Lunch tend to perform better than students who got
+                    free/reduced lunch.</p>
+            </article>
+        </section>
+
+    </main>
+</body>
+
+</html>
